@@ -12,31 +12,31 @@ Simply download/copy [oosm.lua](oosm.lua) into your Lua project and `require` it
 local oosm = require "path.to.oosm"
 
 -- Create the machine which will hold our states
-local trafficLight = oosm.createMachine()
+local trafficLight = oosm.newMachine()
 
 
 -- Create some states for the machine
 ---- Green light
-local greenLight = oosm.createState()
-:addCallback("printColor", function(self, parentMachine)
+local greenLight = oosm.newState()
+:setCallback("printColor", function(self, parentMachine)
 	print("The light is green!")
 end)
 
 ---- Yellow light
-local yellowLight = oosm.createState()
-:addCallback("printColor", function(self, parentMachine)
+local yellowLight = oosm.newState()
+:setCallback("printColor", function(self, parentMachine)
 	print("The light is yellow!")
 end)
 
 ---- Red light
 -- You can add arbitrary fields into the state
-local redLight = oosm.createState()
+local redLight = oosm.newState()
 redLight.redLightRunners = {}
 
-redLight:addCallback("printColor", function(self, parentMachine)
+redLight:setCallback("printColor", function(self, parentMachine)
 	print("The light is red!")
 end)
-:addCallback("checkCar", function(self, parentMachine, carLicensePlate)
+:setCallback("checkCar", function(self, parentMachine, carLicensePlate)
 	-- We can have disjointed callbacks.
 	-- Basically, all callbacks are optional.
 	print(("%s is running the light!"):format(carLicensePlate))
@@ -54,18 +54,18 @@ trafficLight
 trafficLight:swapState("green")
 
 -- Now we can use the machine
-trafficLight:call("printColor")
+trafficLight:run("printColor")
 -- > "The light is green!"
-trafficLight:call("checkCar", "GOODCAR")
+trafficLight:run("checkCar", "GOODCAR")
 -- Nothing happens, as the callback "checkCar" does not exist
 -- for the green light.
 trafficLight:swapState("yellow")
-trafficLight:call("printColor")
+trafficLight:run("printColor")
 -- > "The light is yellow!"
 trafficLight:swapState("red")
-trafficLight:call("printColor")
+trafficLight:run("printColor")
 -- > "The light is red!"
-trafficLight:call("checkCar", "BADCAR")
+trafficLight:run("checkCar", "BADCAR")
 -- > "BADCAR is running the light!"
 
 print(redLight.redLightRunners[1])

@@ -148,7 +148,7 @@ end
 ---@param newStateName string
 ---@return boolean
 function Machine:swapState(newStateName)
-	local formerState = self.current
+	local formerState = self._curr
 	local newState = self._states[newStateName]
 
 	assert(newState ~= nil, ("State %s does not exist"):format(newStateName))
@@ -166,7 +166,7 @@ function Machine:swapState(newStateName)
 			local secondSuccess = newState:_onEntering(self, formerState._name, formerState)
 			if secondSuccess then
 				-- Both switches were successful, exit
-				self.current = newState
+				self._curr = newState
 				return true
 			else
 				-- New state could not switch, attempt to return to initial state
@@ -182,7 +182,7 @@ function Machine:swapState(newStateName)
 	else
 		-- No state exists right now
 		assert(newState:_onEntering(self, nil, nil), ("Could not set %s as the initial state"):format(newStateName))
-		self.current = newState
+		self._curr = newState
 		return true
 	end
 end
@@ -194,7 +194,7 @@ end
 ---@param ... unknown
 ---@return boolean, ... unknown
 function Machine:run(callbackName, ...)
-	local state = self.current
+	local state = self._curr
 	if state then
 		local _callback = state[callbackName]
 		if _callback then
