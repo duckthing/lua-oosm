@@ -65,7 +65,7 @@ function State:_setName(newName)
 	if self._name and self._name ~= newName then
 		-- Already has a name, attempting to set a different name
 		-- You might be putting one state under different names on different machines
-		warn(("Setting state name from '%' to '%'; are you accidentally reusing a state under different names?"):format(self._name, newName))
+		warn(("Setting state name from %s to %s; are you accidentally reusing a state under different names?"):format(self._name, newName))
 	end
 	self._name = newName
 end
@@ -138,7 +138,7 @@ end
 ---@return Machine
 function Machine:addState(name, state)
 	assert(type(name) == "string", ("Expected name to be string, got %s"):format(type(name)))
-	assert(self._states[name] == nil, ("State '%s' already exists; are you sure your names are unique/you didn't insert twice?"):format(name))
+	assert(self._states[name] == nil, ("State %s already exists; are you sure your names are unique/you didn't insert twice?"):format(name))
 	state:_setName(name)
 	self._states[name] = state
 	return self
@@ -157,7 +157,7 @@ function Machine:swapState(newStateName)
 	local formerState = self.current
 	local newState = self._states[newStateName]
 
-	assert(newState ~= nil, ("State '%s' does not exist"):format(newStateName))
+	assert(newState ~= nil, ("State %s does not exist"):format(newStateName))
 	
 	if formerState then
 		-- The former state exists
@@ -177,7 +177,7 @@ function Machine:swapState(newStateName)
 			else
 				-- New state could not switch, attempt to return to initial state
 				-- If unable to, we have no state to go back to
-				assert(formerState:_onEntering(self, newStateName, newState), ("Reached an invalid state attempting to switch from '%s' to '%s'"):format(formerState._name, newStateName))
+				assert(formerState:_onEntering(self, newStateName, newState), ("Reached an invalid state attempting to switch from %s to %s"):format(formerState._name, newStateName))
 				-- Could not switch to new state
 				return false
 			end
@@ -187,7 +187,7 @@ function Machine:swapState(newStateName)
 		end
 	else
 		-- No state exists right now
-		assert(newState:_onEntering(self, nil, nil), ("Could not set '%s' as the initial state"):format(newStateName))
+		assert(newState:_onEntering(self, nil, nil), ("Could not set %s as the initial state"):format(newStateName))
 		self.current = newState
 		return true
 	end
