@@ -62,11 +62,6 @@ end
 ---!!! CALLED AUTOMATICALLY !!!
 ---@param newName string
 function State:_setName(newName)
-	if self._name and self._name ~= newName then
-		-- Already has a name, attempting to set a different name
-		-- You might be putting one state under different names on different machines
-		warn(("Setting state name from %s to %s; are you accidentally reusing a state under different names?"):format(self._name, newName))
-	end
 	self._name = newName
 end
 
@@ -132,7 +127,6 @@ end
 ---Adds a new `State` into `Machine`
 ---
 ---You can add the same `State` to several machines, but you'll run into unexpected behavior
----if you add them under different names. If this happens, a warning will appear in your console.
 ---@param name string
 ---@param state State
 ---@return Machine
